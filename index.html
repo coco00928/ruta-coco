@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ruta Saul">
+<meta name="theme-color" content="#0a0f1e">
+<link rel="manifest" href="manifest.json">
+<title>Mi Ruta Estratégica · Saul</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg:#0a0f1e; --surface:#111827; --surface2:#1a2535; --surface3:#1e2d45;
+  --border:#1e2d45; --border2:#2a3f5f;
+  --green:#00e5a0; --green-d:#00e5a012;
+  --yellow:#f0b429; --yellow-d:#f0b42912;
+  --red:#ff4d6d; --red-d:#ff4d6d12;
+  --blue:#3d9cf0; --blue-d:#3d9cf012;
+  --purple:#a78bfa; --purple-d:#a78bfa12;
+  --orange:#f97316;
+  --text:#e2e8f0; --muted:#64748b; --muted2:#94a3b8;
+  --mono:'SF Mono',SFMono-Regular,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow:hidden;}
+
+/* APP SHELL */
+.app{display:flex;flex-direction:column;height:100%;max-width:560px;margin:0 auto;}
+
+/* HEADER */
+.hdr{padding:max(14px,env(safe-area-inset-top)) 16px 10px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;}
+.hdr-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:6px;}
+.hdr-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.hdr-cap{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);text-align:right;}
+.hdr-cap-lbl{font-size:9px;color:var(--muted);text-align:right;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;display:inline-block;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+.pad{padding:14px 16px 30px;}
+
+/* NAV */
+.nav{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
+.nb{flex:1;padding:9px 2px 8px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;border-top:2px solid transparent;}
+.nb.on{border-top-color:var(--green);}
+.ni{font-size:17px;line-height:1;}
+.nl{font-size:9px;color:var(--muted);font-weight:400;}
+.nb.on .nl{color:var(--green);font-weight:700;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;}
+.card-tap{cursor:pointer;}
+.card-tap:active{opacity:.65;}
+
+/* SEC TITLE */
+.sec{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* BADGE */
+.bdg{display:inline-block;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;letter-spacing:.4px;white-space:nowrap;}
+.bg{background:var(--green-d);color:var(--green);}
+.br{background:var(--red-d);color:var(--red);}
+.by{background:var(--yellow-d);color:var(--yellow);}
+.bb{background:var(--blue-d);color:var(--blue);}
+.bp{background:var(--purple-d);color:var(--purple);}
+
+/* BARS */
+.bar-bg{height:4px;background:var(--border);border-radius:4px;overflow:hidden;margin:5px 0 2px;}
+.bar-fill{height:100%;border-radius:4px;transition:width .5s;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.mt{background:var(--surface2);border-radius:10px;padding:10px;}
+.ml{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.mv{font-family:var(--mono);font-size:12px;font-weight:700;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#0a1e36,#0d1420);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;text-align:center;}
+.hero-cap{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--green);letter-spacing:-1px;}
+.hero-sub{font-size:11px;color:var(--muted);margin-top:3px;}
+.hero-stats{display:flex;justify-content:center;gap:18px;margin-top:12px;}
+.hs{text-align:center;}
+.hs .v{font-family:var(--mono);font-size:17px;font-weight:700;}
+.hs .l{font-size:9px;color:var(--muted);margin-top:1px;}
+.hsdiv{width:1px;background:var(--border);}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:480px;}
+th{background:var(--surface2);color:var(--muted);font-weight:600;padding:9px 10px;text-align:left;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:5px 7px;width:100%;font-size:11px;font-family:var(--mono);outline:none;min-width:60px;}
+.inp:focus{border-color:var(--green);}
+.inp-sm{min-width:50px;width:65px;}
+.inp-md{min-width:70px;width:85px;}
+.inp-lg{min-width:90px;width:110px;}
+
+/* BTN ADD */
+.btn-add{width:100%;background:var(--green-d);border:1px dashed var(--green);color:var(--green);border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px;}
+.btn-add:active{opacity:.7;}
+.btn-del{background:transparent;border:none;color:var(--red);cursor:pointer;font-size:13px;padding:3px 5px;}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:200;align-items:flex-end;}
+.modal.open{display:flex;}
+.modal-inner{background:var(--surface);border-radius:20px 20px 0 0;padding:20px 16px;width:100%;max-height:85vh;overflow-y:auto;padding-bottom:max(20px,env(safe-area-inset-bottom));}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{background:var(--surface2);border:none;color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;}
+.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;}
+.inp-full{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:11px 12px;color:var(--text);font-size:13px;outline:none;margin-bottom:14px;-webkit-appearance:none;}
+.inp-full:focus{border-color:var(--green);}
+select.inp-full{cursor:pointer;}
+.btn-save{width:100%;background:var(--green);border:none;color:#080c14;border-radius:10px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-cancel{width:100%;background:transparent;border:none;color:var(--muted);padding:10px;font-size:13px;cursor:pointer;margin-top:6px;}
+
+/* TOAST */
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);color:var(--text);padding:10px 18px;border-radius:20px;font-size:12px;opacity:0;transition:all .3s;z-index:300;white-space:nowrap;border:1px solid var(--border2);pointer-events:none;}
+
+/* LIVE */
+.live-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.live-bdg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green);background:var(--green-d);padding:4px 10px;border-radius:20px;}
+.spin{animation:spin 1s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.upd-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:8px;font-size:10px;cursor:pointer;}
+
+/* ALERT */
+.alrt{border-radius:10px;padding:11px 13px;margin-bottom:8px;font-size:12px;font-weight:500;line-height:1.5;}
+
+/* SOFIPO CARD */
+.sofi-card{background:var(--surface2);border-radius:12px;padding:13px;margin-bottom:8px;border:1px solid var(--border);}
+
+/* RADAR CARD */
+.radar-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;}
+.radar-card.zona{border-color:var(--green);}
+
+/* AGENDA */
+.ag-item{border-radius:12px;padding:12px 13px;margin-bottom:8px;border-left-width:3px;border-left-style:solid;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-row">
+      <div><div class="hdr-logo"><span class="dot"></span>RUTA ESTRATÉGICA · SAUL</div><div class="hdr-sub" id="hdr-fecha"></div></div>
+      <div><div class="hdr-cap" id="hdr-total">—</div><div class="hdr-cap-lbl">capital total</div></div>
+    </div>
+  </div>
+  <div class="scroll"><div class="pad" id="main-pad"></div></div>
+  <div class="nav">
+    <button class="nb on" onclick="goTab('general')"><span class="ni">⚡</span><span class="nl">General</span></button>
+    <button class="nb" onclick="goTab('gbm')"><span class="ni">📈</span><span class="nl">GBM</span></button>
+    <button class="nb" onclick="goTab('divs')"><span class="ni">💰</span><span class="nl">Divs</span></button>
+    <button class="nb" onclick="goTab('radar')"><span class="ni">🎯</span><span class="nl">Radar</span></button>
+    <button class="nb" onclick="goTab('agenda')"><span class="ni">📅</span><span class="nl">Agenda</span></button>
+  </div>
+</div>
+<div class="modal" id="modal" onclick="if(event.target===this)cerrarModal()">
+  <div class="modal-inner" id="modal-body"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+// DATOS BASE — Tu portafolio real Jun 2026
+// ══════════════════════════════════════════
+const DEF = {
+  pilares:[
+    {id:'gbm',   n:'GBM (Acciones y FIBRAs)', saldo:68000,    aporte:1800, c:'#3d9cf0', ic:'📈'},
+    {id:'sofi',  n:'SOFIPOs',                  saldo:28175,    aporte:800,  c:'#00e5a0', ic:'🏦'},
+    {id:'ytp',   n:'YoTePresto (P2P)',          saldo:15960,    aporte:800,  c:'#f0b429', ic:'🤝'},
+    {id:'fins',  n:'Finsus',                    saldo:4583,     aporte:400,  c:'#a78bfa', ic:'💜'},
+    {id:'bitso', n:'Bitcoin (Bitso)',            saldo:2704,     aporte:400,  c:'#f97316', ic:'₿'},
+  ],
+  sofipos:[
+    {id:'nu',   n:'Nu Cajita Turbo', saldo:25290.51, tasa:13.00, meta:25000, c:'#a855f7', ic:'🟣', nota:'Topada en $25K ✅'},
+    {id:'didi', n:'DiDi Cuenta',    saldo:2884.54,  tasa:15.00, meta:10000, c:'#00e5a0', ic:'🟢', nota:'Meta: $10K · Sep 2026'},
+  ],
+  gbm:[
+    // Globales
+    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:4050.00, pm:4250.00, st:'comprar',  yt:'AMZN'},
+    {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6318.27, pm:6318.27, st:'mantener', yt:'MSFT'},
+    {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1501.50, pm:1401.00, st:'mantener', yt:'NFLX'},
+    {t:'NU',      n:'Nu Holdings',     g:'Global', tits:25,  pp:218.00,  pm:213.00,  st:'acumular', yt:'NU'},
+    // México
+    {t:'WALMEX',  n:'Walmart México',  g:'México', tits:192, pp:54.00,   pm:52.02,   st:'vigilar',  yt:'WALMEXV.MX'},
+    {t:'FEMSA',   n:'FEMSA',           g:'México', tits:28,  pp:172.50,  pm:217.01,  st:'mantener', yt:'FEMSAUBD.MX'},
+    {t:'KOF',     n:'Coca-Cola FEMSA', g:'México', tits:10,  pp:151.50,  pm:184.73,  st:'mantener', yt:'KOFUBL.MX'},
+    {t:'BBAJIO',  n:'Banco del Bajío', g:'México', tits:46,  pp:43.50,   pm:55.00,   st:'mantener', yt:'BBAJIO-O.MX'},
+    {t:'HERDEZ',  n:'Grupo Herdez',    g:'México', tits:28,  pp:39.00,   pm:51.43,   st:'vigilar',  yt:'HERDEZ.MX'},
+    {t:'ALSEA',   n:'Alsea',           g:'México', tits:60,  pp:48.05,   pm:48.05,   st:'vigilar',  yt:'ALSEA.MX'},
+    // FIBRAs
+    {t:'FNOVA17', n:'Fibra Nova',      g:'FIBRA',  tits:10,  pp:21.00,   pm:45.30,   st:'estrella', yt:'FNOVA17.MX'},
+    {t:'FUNO11',  n:'Fibra Uno',       g:'FIBRA',  tits:22,  pp:22.00,   pm:29.52,   st:'mantener', yt:'FUNO11.MX'},
+    {t:'DANHOS',  n:'Fibra Danhos',    g:'FIBRA',  tits:105, pp:24.00,   pm:28.08,   st:'mantener', yt:'DANHOS13.MX'},
+    {t:'FMTY14',  n:'Fibra MTY',       g:'FIBRA',  tits:36,  pp:14.28,   pm:14.25,   st:'mantener', yt:'FMTY14.MX'},
+    {t:'FMX23',   n:'Fibra Infra',     g:'FIBRA',  tits:70,  pp:28.00,   pm:30.10,   st:'mantener', yt:'FMX23.MX'},
+  ],
+  avisos:[
+    {activo:'FMTY14', exDiv:'2026-06-25', pago:'2026-06-30', monto:0.085, tits:36},
+    {activo:'WALMEX', exDiv:'2026-07-22', pago:'2026-08-05', monto:0.00,  tits:192},
+    {activo:'MSFT',   exDiv:'2026-08-20', pago:'2026-09-11', monto:0.83,  tits:1},
+  ],
+  cobros:[
+    {mes:'Feb', activo:'FMTY14', bruto:3.06, isr:0.46},
+    {mes:'Feb', activo:'FUNO11', bruto:8.80, isr:1.32},
+    {mes:'Feb', activo:'DANHOS', bruto:9.45, isr:1.42},
+  ],
+  radar:[
+    {t:'GOOGL', n:'Google (Alphabet)', precio:369, zMin:340, zMax:355, obj:432, pot:17, mon:'USD'},
+    {t:'NVDA',  n:'NVIDIA',            precio:211, zMin:175, zMax:190, obj:275, pot:40, mon:'USD'},
+    {t:'SPCX',  n:'SpaceX',            precio:135, zMin:110, zMax:120, obj:200, pot:48, mon:'USD'},
+  ],
+  agenda:[
+    {u:'alta',  f:'Esta semana', ic:'🎯', t:'Comprar NU Holdings',       d:'Usar $6,318 disponibles. ~25-28 acciones a $220 MXN'},
+    {u:'media', f:'22 Jul 2026', ic:'📊', t:'Reporte Q2 WALMEX',         d:'Decidir si aumentar posición según resultados'},
+    {u:'media', f:'18 Ago 2026', ic:'📈', t:'Reporte Q2 NU Holdings',    d:'Catalizador positivo si mejoran EPS vs $0.18'},
+    {u:'media', f:'Sep 2026',    ic:'🏦', t:'DiDi tope $10,000',         d:'Abrir nueva SOFIPO con mejor tasa'},
+    {u:'baja',  f:'Sep 2026',    ic:'💡', t:'Redirigir $400 Finsus',     d:'Evaluar mover a GBM o SOFIPO mayor tasa'},
+    {u:'baja',  f:'Nov 2026',    ic:'🗂', t:'Auditoría trimestral',      d:'Revisión completa de los 5 pilares'},
+    {u:'baja',  f:'Dic 2026',    ic:'🎯', t:'Planear 2027',              d:'Meta: superar $140,000 MXN en capital total'},
+    {u:'baja',  f:'Continuo',    ic:'🔵', t:'GOOGL zona $340–355 USD',   d:'No entrar antes — esperar corrección'},
+    {u:'baja',  f:'Continuo',    ic:'🔵', t:'NVDA zona $175–190 USD',    d:'Esperar corrección del 15-20%'},
+    {u:'baja',  f:'Continuo',    ic:'🔵', t:'SPCX zona $110–120 USD',    d:'IPO reciente — esperar 30-60 días post-IPO'},
+  ]
+};
+
+// ── Cargar / guardar ──
+function cargar(){
+  try{ const s=localStorage.getItem('ruta_saul_v4'); return s?JSON.parse(s):JSON.parse(JSON.stringify(DEF)); }
+  catch(e){ return JSON.parse(JSON.stringify(DEF)); }
+}
+function guardar(){ try{ localStorage.setItem('ruta_saul_v4',JSON.stringify(D)); }catch(e){} }
+let D = cargar();
+
+// ── Helpers ──
+const fmt = n => '$'+Math.abs(n).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtK = n => {
+  const a=Math.abs(n);
+  if(a>=1000) return (n<0?'-':'')+'$'+(a/1000).toLocaleString('es-MX',{minimumFractionDigits:1,maximumFractionDigits:1})+'K';
+  return fmt(n);
+};
+const pct = n => (n>=0?'+':'')+n.toFixed(2)+'%';
+const gc = n => n>=0?'var(--green)':'var(--red)';
+const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+const sCfg = {
+  comprar: {l:'COMPRAR',  cls:'bg'},
+  acumular:{l:'ACUMULAR', cls:'bg'},
+  estrella:{l:'⭐ ESTRELLA',cls:'by'},
+  mantener:{l:'MANTENER', cls:'bb'},
+  vigilar: {l:'VIGILAR',  cls:'by'},
+  vender:  {l:'VENDER ⚠',cls:'br'},
+};
+const gLabels = {Global:'🌎 Global', México:'🇲🇽 México', FIBRA:'🏢 FIBRA'};
+
+// ── Total GBM ──
+function totalGBM(){ return D.gbm.reduce((s,a)=>s+(a.tits*a.pm),0); }
+function totalPilares(){
+  const gbmVal = totalGBM();
+  return D.pilares.reduce((s,p)=> p.id==='gbm' ? s+gbmVal : s+p.saldo, 0);
+}
+
+// ══════════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════════
+let tab = 'general';
+let actualizando = false;
+
+function goTab(t){
+  tab=t;
+  document.querySelectorAll('.nb').forEach((b,i)=>{
+    b.classList.toggle('on',['general','gbm','divs','radar','agenda'][i]===t);
+  });
+  renderTab();
+  document.getElementById('main-pad').parentElement.scrollTop=0;
+}
+
+function renderTab(){
+  // Header
+  const total = totalPilares();
+  document.getElementById('hdr-total').textContent = fmtK(total);
+  const now = new Date();
+  document.getElementById('hdr-fecha').textContent =
+    now.toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'})+' · '+
+    now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+
+  const map = {general:tplGeneral, gbm:tplGBM, divs:tplDivs, radar:tplRadar, agenda:tplAgenda};
+  document.getElementById('main-pad').innerHTML = map[tab]();
+  if(tab==='gbm') document.getElementById('upd-btn')?.addEventListener('click',actualizarPrecios);
+}
+
+// ══════════════════════════════════════════
+// PRECIOS EN TIEMPO REAL — Yahoo Finance
+// ══════════════════════════════════════════
+async function actualizarPrecios(){
+  if(actualizando) return;
+  actualizando=true;
+  const ic=document.getElementById('live-ic');
+  const btn=document.getElementById('upd-btn');
+  if(ic) ic.className='spin';
+  if(btn) btn.textContent='Actualizando...';
+
+  const syms = D.gbm.map(a=>a.yt).filter(Boolean).join(',');
+  const yUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice`;
+  const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl)}`;
+
+  try{
+    const r = await fetch(proxy,{signal:AbortSignal.timeout(10000)});
+    const j = await r.json();
+    const quotes = j?.quoteResponse?.result || [];
+    let updated=0;
+    quotes.forEach(q=>{
+      const a = D.gbm.find(x=>x.yt===q.symbol);
+      if(a && q.regularMarketPrice){
+        a.pm = parseFloat(q.regularMarketPrice.toFixed(2));
+        updated++;
+      }
+    });
+    guardar();
+    renderTab();
+    toast(updated>0?`✓ ${updated} precios actualizados`:'Sin precios nuevos — intenta de nuevo');
+  }catch(e){
+    toast('Sin conexión — ingresa precios manualmente');
+  }
+  actualizando=false;
+}
+
+// ══════════════════════════════════════════
+// TAB GENERAL
+// ══════════════════════════════════════════
+function tplGeneral(){
+  const total = totalPilares();
+  const gbmVal = totalGBM();
+  const totalAporte = D.pilares.reduce((s,p)=>s+p.aporte,0);
+  const verde = D.gbm.filter(a=>a.pm>=a.pp).length;
+  const rojo  = D.gbm.filter(a=>a.pm<a.pp).length;
+
+  // Pilares
+  const pilaresH = D.pilares.map(p=>{
+    const val = p.id==='gbm' ? gbmVal : p.saldo;
+    const pp = (val/total*100).toFixed(1);
+    return `<div class="card card-tap" onclick="editPilar('${p.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <div style="width:36px;height:36px;border-radius:9px;background:${p.c}18;display:flex;align-items:center;justify-content:center;font-size:17px">${p.ic}</div>
+          <div><div style="font-weight:600;font-size:13px">${p.n}</div><div style="font-size:10px;color:var(--muted)">${fmt(p.aporte)}/mes</div></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono);font-size:13px;font-weight:700">${fmt(val)}</div>
+          <div style="font-size:9px;color:var(--muted)">${pp}%</div>
+        </div>
+      </div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${pp}%;background:${p.c}"></div></div>
+    </div>`;
+  }).join('');
+
+  // SOFIPOs desglose
+  const totalSofi = D.sofipos.reduce((s,x)=>s+x.saldo,0);
+  const intMes = D.sofipos.reduce((s,x)=>s+(x.saldo*x.tasa/100/12),0);
+  const sofiH = D.sofipos.map(s=>{
+    const pp = Math.min(100,(s.saldo/s.meta*100)).toFixed(1);
+    const falta = Math.max(0,s.meta-s.saldo);
+    const iMes = s.saldo*s.tasa/100/12;
+    const iAno = s.saldo*s.tasa/100;
+    const enMeta = s.saldo>=s.meta;
+    return `<div class="sofi-card" style="border-color:${enMeta?s.c+'50':'var(--border)'};cursor:pointer" onclick="editSofipo('${s.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="font-size:17px">${s.ic}</span>
+          <div><div style="font-weight:700;font-size:13px">${s.n}</div><div style="font-size:10px;color:var(--muted)">${s.nota}</div></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:${s.c}">${fmt(s.saldo)}</div>
+          <div style="font-size:10px;color:var(--muted)">Tasa: <span style="color:var(--green);font-weight:700">${s.tasa}% anual</span></div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:4px">
+        <span>Meta: ${fmt(s.meta)}</span>
+        <span>${enMeta?'✅ Topada':'Falta: '+fmt(falta)}</span>
+      </div>
+      <div class="bar-bg" style="height:5px"><div class="bar-fill" style="width:${pp}%;background:${s.c}"></div></div>
+      <div class="g2" style="margin-top:8px">
+        <div style="background:var(--surface);border-radius:8px;padding:7px 10px;text-align:center">
+          <div style="font-size:8px;color:var(--muted);margin-bottom:2px">INTERÉS/MES</div>
+          <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">${fmt(iMes)}</div>
+        </div>
+        <div style="background:var(--surface);border-radius:8px;padding:7px 10px;text-align:center">
+          <div style="font-size:8px;color:var(--muted);margin-bottom:2px">INTERÉS/AÑO</div>
+          <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)">${fmt(iAno)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="hero">
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">Capital Total Invertido</div>
+    <div class="hero-cap">${fmt(total)}</div>
+    <div class="hero-sub">${fmt(totalAporte)}/mes · ${D.gbm.length} posiciones GBM</div>
+    <div class="hero-stats">
+      <div class="hs"><div class="v" style="color:var(--green)">${verde}</div><div class="l">En verde</div></div>
+      <div class="hsdiv"></div>
+      <div class="hs"><div class="v" style="color:var(--red)">${rojo}</div><div class="l">En rojo</div></div>
+      <div class="hsdiv"></div>
+      <div class="hs"><div class="v" style="color:var(--yellow)">5</div><div class="l">Pilares</div></div>
+    </div>
+  </div>
+  <div class="sec">Distribución de Pilares <span style="font-size:8px;color:var(--muted)">(toca para editar)</span></div>
+  ${pilaresH}
+  <div class="sec">🏦 SOFIPOs — Desglose <span style="font-size:8px;color:var(--muted)">(toca para editar)</span></div>
+  <div class="card" style="padding:13px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:10px;color:var(--muted)">Total SOFIPOs</div><div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--green)">${fmt(totalSofi)}</div></div>
+      <div style="text-align:right"><div style="font-size:10px;color:var(--muted)">Interés mensual</div><div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--green)">${fmt(intMes)}</div></div>
+    </div>
+    ${sofiH}
+    <button class="btn-add" onclick="addSofipo()">+ Agregar cuenta SOFIPO</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// TAB GBM
+// ══════════════════════════════════════════
+function tplGBM(){
+  const grupos = ['Global','México','FIBRA'];
+  let tComp=0, tMkt=0;
+  D.gbm.forEach(a=>{ tComp+=a.tits*a.pp; tMkt+=a.tits*a.pm; });
+  const tPlus = tMkt-tComp;
+  const tPlusPct = tComp>0?(tPlus/tComp*100):0;
+
+  const gruposH = grupos.map(g=>{
+    const stocks = D.gbm.filter(a=>a.g===g);
+    const rows = stocks.map(a=>{
+      const idx = D.gbm.indexOf(a);
+      const tm = a.tits*a.pm;
+      const tc = a.tits*a.pp;
+      const plus = tm-tc;
+      const plusPct = tc>0?(plus/tc*100):0;
+      const cfg = sCfg[a.st]||sCfg.mantener;
+      return `<tr>
+        <td><div style="font-family:var(--mono);font-weight:700;font-size:11px">${a.t}</div><div style="font-size:9px;color:var(--muted)">${a.n}</div></td>
+        <td><input class="inp inp-sm" type="number" value="${a.tits}" onchange="updGBM(${idx},'tits',this.value)"></td>
+        <td><input class="inp inp-md" type="number" step="0.01" value="${a.pp.toFixed(2)}" onchange="updGBM(${idx},'pp',this.value)"></td>
+        <td><input class="inp inp-md" type="number" step="0.01" value="${a.pm.toFixed(2)}" onchange="updGBM(${idx},'pm',this.value)"></td>
+        <td style="font-family:var(--mono);color:var(--blue)">${fmtK(tm)}</td>
+        <td style="font-family:var(--mono);color:${gc(plus)}">${pct(plusPct)}</td>
+        <td><span class="bdg ${cfg.cls}">${cfg.l}</span></td>
+        <td><button class="btn-del" onclick="delGBM(${idx})"><i class="fa fa-trash"></i></button></td>
+      </tr>`;
+    }).join('');
+    return `
+    <div class="sec">${gLabels[g]}</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Ticker</th><th>Títs</th><th>P.Prom</th><th>P.Mkt</th><th>Total</th><th>+/−</th><th>Estado</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="live-row">
+    <div class="live-bdg"><i id="live-ic" class="fa-solid fa-circle-dot"></i> Precios en vivo</div>
+    <button id="upd-btn" class="upd-btn">⟳ Actualizar</button>
+  </div>
+  <div class="card">
+    <div class="g3">
+      <div class="mt"><div class="ml">Invertido</div><div class="mv">${fmtK(tComp)}</div></div>
+      <div class="mt"><div class="ml">Mercado</div><div class="mv" style="color:var(--blue)">${fmtK(tMkt)}</div></div>
+      <div class="mt"><div class="ml">Plusvalía</div><div class="mv" style="color:${gc(tPlus)}">${pct(tPlusPct)}</div></div>
+    </div>
+  </div>
+  ${gruposH}
+  <button class="btn-add" onclick="addGBM()">+ Agregar acción o FIBRA</button>`;
+}
+
+// ══════════════════════════════════════════
+// TAB DIVIDENDOS
+// ══════════════════════════════════════════
+function tplDivs(){
+  // Solo fuentes reales que pagan dividendos / distribuciones
+  const avisosH = D.avisos.map((a,i)=>{
+    const total = (a.monto*a.tits).toFixed(2);
+    return `<tr>
+      <td style="font-family:var(--mono);font-weight:700">${a.activo}</td>
+      <td><input class="inp inp-lg" type="date" value="${a.exDiv}" onchange="updAviso(${i},'exDiv',this.value)"></td>
+      <td><input class="inp inp-lg" type="date" value="${a.pago}"  onchange="updAviso(${i},'pago',this.value)"></td>
+      <td><input class="inp inp-md" type="number" step="0.001" value="${a.monto}" onchange="updAviso(${i},'monto',this.value)"></td>
+      <td><input class="inp inp-sm" type="number" value="${a.tits}" onchange="updAviso(${i},'tits',this.value)"></td>
+      <td style="font-family:var(--mono);color:var(--green);font-weight:700">${fmt(a.monto*a.tits)}</td>
+      <td><button class="btn-del" onclick="delAviso(${i})"><i class="fa fa-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+
+  const cobrosH = D.cobros.map((c,i)=>{
+    const neto = c.bruto-c.isr;
+    return `<tr>
+      <td><input class="inp inp-sm" type="text" value="${c.mes}"    onchange="updCobro(${i},'mes',this.value)"></td>
+      <td style="font-family:var(--mono);font-weight:700"><input class="inp inp-md" type="text" value="${c.activo}" onchange="updCobro(${i},'activo',this.value)"></td>
+      <td><input class="inp inp-md" type="number" step="0.01" value="${c.bruto}" onchange="updCobro(${i},'bruto',this.value)"></td>
+      <td><input class="inp inp-md" type="number" step="0.01" value="${c.isr}"   onchange="updCobro(${i},'isr',this.value)"></td>
+      <td style="font-family:var(--mono);color:${gc(neto)};font-weight:700">${fmt(neto)}</td>
+      <td><button class="btn-del" onclick="delCobro(${i})"><i class="fa fa-trash"></i></button></td>
+    </tr>`;
+  }).join('');
+
+  const totalCobrado = D.cobros.reduce((s,c)=>s+(c.bruto-c.isr),0);
+
+  // Intereses SOFIPOs
+  const sofiIntH = D.sofipos.map(s=>{
+    const iMes = s.saldo*s.tasa/100/12;
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:12px;font-weight:600">${s.n}</div><div style="font-size:10px;color:var(--muted)">${s.tasa}% anual sobre ${fmt(s.saldo)}</div></div>
+      <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green)">${fmt(iMes)}/mes</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="sec">📅 Próximos Pagos / Distribuciones</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Activo</th><th>Ex-Div</th><th>Pago</th><th>$/Tít</th><th>Tíuts</th><th>Total Est.</th><th></th></tr></thead>
+      <tbody>${avisosH}</tbody>
+    </table></div>
+  </div>
+  <button class="btn-add" onclick="addAviso()">+ Agregar aviso de pago</button>
+
+  <div class="sec">💵 Dividendos y Distribuciones Cobradas</div>
+  <div class="card" style="padding:0;overflow:hidden">
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Mes</th><th>Activo</th><th>Bruto</th><th>ISR</th><th>Neto</th><th></th></tr></thead>
+      <tbody>${cobrosH}</tbody>
+    </table></div>
+  </div>
+  <button class="btn-add" onclick="addCobro()">+ Registrar cobro</button>
+
+  <div class="sec">🏦 Intereses SOFIPOs (ingreso pasivo mensual)</div>
+  <div class="card">
+    ${sofiIntH}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;margin-top:2px">
+      <div style="font-size:12px;font-weight:700">Total intereses/mes</div>
+      <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--green)">${fmt(D.sofipos.reduce((s,x)=>s+(x.saldo*x.tasa/100/12),0))}</div>
+    </div>
+  </div>
+
+  <div class="card" style="background:var(--green-d);border-color:var(--green)30">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:10px;color:var(--muted)">Total dividendos cobrados (neto)</div><div style="font-size:11px;color:var(--muted2)">Solo FIBRAs y acciones MX</div></div>
+      <div style="font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green)">${fmt(totalCobrado)}</div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+// TAB RADAR
+// ══════════════════════════════════════════
+function tplRadar(){
+  const radarH = D.radar.map((r,i)=>{
+    const enZona = r.precio<=r.zMax;
+    const dist = ((r.precio-r.zMax)/r.precio*100).toFixed(1);
+    const fill = Math.min(100,Math.max(5,((r.precio-r.zMin*0.85)/(r.obj-r.zMin*0.85))*100));
+    return `<div class="radar-card ${enZona?'zona':''}" onclick="editRadar(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px">
+        <div>
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700">${r.t}</div>
+          <div style="font-size:10px;color:var(--muted)">${r.n}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--yellow)">$${r.precio} ${r.mon}</div>
+          <div style="font-size:9px;color:${enZona?'var(--green)':'var(--purple)'};margin-top:2px">${enZona?'✅ EN ZONA — evalúa entrar':dist+'% sobre zona'}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:5px">
+        <span>Zona: $${r.zMin}–$${r.zMax}</span><span>Objetivo: $${r.obj} (+${r.pot}%)</span>
+      </div>
+      <div class="bar-bg" style="height:3px"><div class="bar-fill" style="width:${fill}%;background:${enZona?'var(--green)':'var(--purple)'}"></div></div>
+    </div>`;
+  }).join('');
+
+  return `
+  <div style="background:var(--purple-d);border:1px solid #a78bfa25;border-radius:12px;padding:13px;margin-bottom:14px">
+    <div style="font-size:12px;color:var(--purple);font-weight:700;margin-bottom:3px">🎯 Estrategia de entrada</div>
+    <div style="font-size:11px;color:var(--muted2);line-height:1.6">No entrar en máximos. Cada acción tiene zona verde de compra ideal. Fuera de esa zona, esperamos. Toca para editar precios.</div>
+  </div>
+  ${radarH}
+  <button class="btn-add" onclick="addRadar()">+ Agregar al radar</button>`;
+}
+
+// ══════════════════════════════════════════
+// TAB AGENDA
+// ══════════════════════════════════════════
+function tplAgenda(){
+  const cfg = {
+    alta: {c:'var(--red)',    b:'var(--red-d)',    l:'Urgente'},
+    media:{c:'var(--yellow)', b:'var(--yellow-d)', l:'Importante'},
+    baja: {c:'var(--blue)',   b:'var(--blue-d)',   l:'Seguimiento'},
+  };
+  const legend = Object.entries(cfg).map(([k,v])=>
+    `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:${v.c};margin-right:10px">
+      <span style="width:5px;height:5px;border-radius:50%;background:${v.c};display:inline-block"></span>${v.l}
+    </span>`).join('');
+
+  const items = D.agenda.map((e,i)=>{
+    const u = cfg[e.u];
+    return `<div class="ag-item" style="background:${u.b};border-color:${u.c}30;border-left-color:${u.c}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px">${e.ic} ${e.t}</div>
+          <div style="font-size:11px;color:var(--muted2);line-height:1.5">${e.d}</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:${u.c};background:${u.b};padding:3px 7px;border-radius:6px;white-space:nowrap;border:1px solid ${u.c}30">${e.f}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div style="margin-bottom:14px">${legend}</div>${items}`;
+}
+
+// ══════════════════════════════════════════
+// MODALES
+// ══════════════════════════════════════════
+function abrirModal(html){ document.getElementById('modal-body').innerHTML=html; document.getElementById('modal').classList.add('open'); }
+function cerrarModal(){ document.getElementById('modal').classList.remove('open'); }
+
+// Editar pilar
+function editPilar(id){
+  const p=D.pilares.find(x=>x.id===id);
+  abrirModal(`<div class="modal-title">${p.ic} ${p.n} <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Saldo actual (MXN)</label><input class="inp-full" type="number" id="ep-s" value="${p.saldo}">
+  <label class="lbl">Aportación mensual (MXN)</label><input class="inp-full" type="number" id="ep-a" value="${p.aporte}">
+  <button class="btn-save" onclick="savePilar('${id}')">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function savePilar(id){
+  const p=D.pilares.find(x=>x.id===id);
+  p.saldo=+document.getElementById('ep-s').value||p.saldo;
+  p.aporte=+document.getElementById('ep-a').value||p.aporte;
+  guardar(); cerrarModal(); renderTab();
+}
+
+// Editar sofipo
+function editSofipo(id){
+  const s=D.sofipos.find(x=>x.id===id);
+  abrirModal(`<div class="modal-title">${s.ic} ${s.n} <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Saldo actual (MXN)</label><input class="inp-full" type="number" id="es-s" value="${s.saldo}" step="0.01">
+  <label class="lbl">Tasa anual (%)</label><input class="inp-full" type="number" id="es-t" value="${s.tasa}" step="0.01">
+  <label class="lbl">Meta de tope (MXN)</label><input class="inp-full" type="number" id="es-m" value="${s.meta}">
+  <label class="lbl">Nota</label><input class="inp-full" type="text" id="es-n" value="${s.nota}">
+  <button class="btn-save" onclick="saveSofipo('${id}')">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveSofipo(id){
+  const s=D.sofipos.find(x=>x.id===id);
+  s.saldo=+document.getElementById('es-s').value||s.saldo;
+  s.tasa=+document.getElementById('es-t').value||s.tasa;
+  s.meta=+document.getElementById('es-m').value||s.meta;
+  s.nota=document.getElementById('es-n').value||s.nota;
+  guardar(); cerrarModal(); renderTab();
+}
+function addSofipo(){
+  D.sofipos.push({id:'sofi_'+Date.now(),n:'Nueva SOFIPO',saldo:0,tasa:10,meta:10000,c:'#64748b',ic:'🏦',nota:''});
+  guardar(); renderTab();
+}
+
+// GBM
+function updGBM(i,f,v){ D.gbm[i][f]=f==='t'||f==='n'||f==='g'||f==='yt'?v:(parseFloat(v)||0); guardar(); renderTab(); }
+function delGBM(i){ if(confirm('¿Eliminar '+D.gbm[i].t+'?')){ D.gbm.splice(i,1); guardar(); renderTab(); } }
+function addGBM(){
+  const opts = Object.keys(sCfg).map(k=>`<option value="${k}">${sCfg[k].l}</option>`).join('');
+  abrirModal(`<div class="modal-title">+ Nueva posición <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Ticker</label><input class="inp-full" type="text" id="ng-t" placeholder="MSFT">
+  <label class="lbl">Nombre</label><input class="inp-full" type="text" id="ng-n" placeholder="Microsoft">
+  <label class="lbl">Grupo</label>
+  <select class="inp-full" id="ng-g"><option>Global</option><option>México</option><option>FIBRA</option></select>
+  <label class="lbl">Títulos</label><input class="inp-full" type="number" id="ng-ti" placeholder="0">
+  <label class="lbl">Precio promedio (MXN)</label><input class="inp-full" type="number" id="ng-pp" placeholder="0.00" step="0.01">
+  <label class="lbl">Precio mercado (MXN)</label><input class="inp-full" type="number" id="ng-pm" placeholder="0.00" step="0.01">
+  <label class="lbl">Estado</label><select class="inp-full" id="ng-st">${opts}</select>
+  <label class="lbl">Ticker Yahoo (para precios)</label><input class="inp-full" type="text" id="ng-yt" placeholder="MSFT o FEMSAUBD.MX">
+  <button class="btn-save" onclick="saveAddGBM()">Agregar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveAddGBM(){
+  D.gbm.push({
+    t:document.getElementById('ng-t').value.toUpperCase(),
+    n:document.getElementById('ng-n').value,
+    g:document.getElementById('ng-g').value,
+    tits:+document.getElementById('ng-ti').value||0,
+    pp:+document.getElementById('ng-pp').value||0,
+    pm:+document.getElementById('ng-pm').value||0,
+    st:document.getElementById('ng-st').value,
+    yt:document.getElementById('ng-yt').value,
+  });
+  guardar(); cerrarModal(); renderTab();
+}
+
+// Avisos
+function updAviso(i,f,v){ D.avisos[i][f]=f==='activo'||f==='exDiv'||f==='pago'?v:(parseFloat(v)||0); guardar(); renderTab(); }
+function delAviso(i){ D.avisos.splice(i,1); guardar(); renderTab(); }
+function addAviso(){
+  D.avisos.push({activo:'',exDiv:'',pago:'',monto:0,tits:0});
+  guardar(); renderTab();
+}
+
+// Cobros
+function updCobro(i,f,v){ D.cobros[i][f]=f==='mes'||f==='activo'?v:(parseFloat(v)||0); guardar(); renderTab(); }
+function delCobro(i){ D.cobros.splice(i,1); guardar(); renderTab(); }
+function addCobro(){ D.cobros.push({mes:'',activo:'',bruto:0,isr:0}); guardar(); renderTab(); }
+
+// Radar
+function editRadar(i){
+  const r=D.radar[i];
+  abrirModal(`<div class="modal-title">📡 ${r.t} <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Precio actual (${r.mon})</label><input class="inp-full" type="number" id="er-p" value="${r.precio}" step="0.01">
+  <label class="lbl">Zona mínima de compra</label><input class="inp-full" type="number" id="er-mn" value="${r.zMin}" step="0.01">
+  <label class="lbl">Zona máxima de compra</label><input class="inp-full" type="number" id="er-mx" value="${r.zMax}" step="0.01">
+  <label class="lbl">Precio objetivo</label><input class="inp-full" type="number" id="er-o" value="${r.obj}" step="0.01">
+  <label class="lbl">Potencial % estimado</label><input class="inp-full" type="number" id="er-pot" value="${r.pot}" step="0.1">
+  <button class="btn-save" onclick="saveRadar(${i})">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveRadar(i){
+  D.radar[i].precio=+document.getElementById('er-p').value||D.radar[i].precio;
+  D.radar[i].zMin=+document.getElementById('er-mn').value||D.radar[i].zMin;
+  D.radar[i].zMax=+document.getElementById('er-mx').value||D.radar[i].zMax;
+  D.radar[i].obj=+document.getElementById('er-o').value||D.radar[i].obj;
+  D.radar[i].pot=+document.getElementById('er-pot').value||D.radar[i].pot;
+  guardar(); cerrarModal(); renderTab();
+}
+function addRadar(){
+  abrirModal(`<div class="modal-title">+ Agregar al Radar <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Ticker</label><input class="inp-full" type="text" id="ar-t" placeholder="GOOGL">
+  <label class="lbl">Nombre</label><input class="inp-full" type="text" id="ar-n" placeholder="Google">
+  <label class="lbl">Precio actual (USD)</label><input class="inp-full" type="number" id="ar-p" step="0.01">
+  <label class="lbl">Zona mínima de compra</label><input class="inp-full" type="number" id="ar-mn" step="0.01">
+  <label class="lbl">Zona máxima de compra</label><input class="inp-full" type="number" id="ar-mx" step="0.01">
+  <label class="lbl">Precio objetivo</label><input class="inp-full" type="number" id="ar-o" step="0.01">
+  <label class="lbl">Potencial %</label><input class="inp-full" type="number" id="ar-pot" step="0.1">
+  <button class="btn-save" onclick="saveAddRadar()">Agregar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveAddRadar(){
+  D.radar.push({
+    t:document.getElementById('ar-t').value.toUpperCase(),
+    n:document.getElementById('ar-n').value,
+    precio:+document.getElementById('ar-p').value||0,
+    zMin:+document.getElementById('ar-mn').value||0,
+    zMax:+document.getElementById('ar-mx').value||0,
+    obj:+document.getElementById('ar-o').value||0,
+    pot:+document.getElementById('ar-pot').value||0,
+    mon:'USD'
+  });
+  guardar(); cerrarModal(); renderTab();
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; },2500);
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderTab();
+if(navigator.userAgent.includes('Safari')&&!navigator.userAgent.includes('Chrome')&&!window.navigator.standalone){
+  setTimeout(()=>toast('Toca Compartir → "Añadir a pantalla de inicio"'),2000);
+}
+setInterval(()=>{ if(!document.hidden&&tab==='gbm') actualizarPrecios(); },5*60*1000);
+</script>
+</body>
+</html>
