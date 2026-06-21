@@ -175,11 +175,22 @@ select.inp-full{cursor:pointer;}
 // ══════════════════════════════════════════
 const DEF = {
   pilares:[
-    {id:'gbm',   n:'GBM (Acciones y FIBRAs)', saldo:68000,    aporte:1800, c:'#3d9cf0', ic:'📈'},
-    {id:'sofi',  n:'SOFIPOs',                  saldo:28175,    aporte:800,  c:'#00e5a0', ic:'🏦'},
-    {id:'ytp',   n:'YoTePresto (P2P)',          saldo:15960,    aporte:800,  c:'#f0b429', ic:'🤝'},
-    {id:'fins',  n:'Finsus',                    saldo:4583,     aporte:400,  c:'#a78bfa', ic:'💜'},
-    {id:'bitso', n:'Bitcoin (Bitso)',            saldo:2704,     aporte:400,  c:'#f97316', ic:'₿'},
+    {id:'gbm',   n:'GBM (Acciones y FIBRAs)', saldo:68000,    aporte:1800, c:'#3d9cf0', ic:'📈', tasa:null},
+    {id:'sofi',  n:'SOFIPOs',                  saldo:28175,    aporte:800,  c:'#00e5a0', ic:'🏦', tasa:null},
+    {id:'ytp',   n:'YoTePresto (P2P)',          saldo:15960,    aporte:800,  c:'#f0b429', ic:'🤝', tasa:18.71},
+    {id:'fins',  n:'Finsus',                    saldo:4583,     aporte:400,  c:'#a78bfa', ic:'💜', tasa:10.0},
+    {id:'bitso', n:'Cripto (Bitso)',             saldo:2704,     aporte:400,  c:'#f97316', ic:'₿', tasa:null},
+  ],
+  // Poder de compra GBM: efectivo manual + aportación semanal configurable
+  poderCompra:{
+    efectivo: 99.17,
+    aporteSemanal: 450,
+    incluirAporte: true
+  },
+  // Posiciones cripto individuales (Bitso)
+  cripto:[
+    {t:'BTC', n:'Bitcoin', cant:0.00237124, pm:2704.00, color:'#f97316', ic:'₿'},
+    {t:'XRP', n:'XRP',     cant:0,          pm:0,       color:'#23292f', ic:'✕'},
   ],
   sofipos:[
     {id:'nu',   n:'Nu Cajita Turbo', saldo:25290.51, tasa:13.00, meta:25000, c:'#a855f7', ic:'🟣', nota:'Topada en $25K ✅'},
@@ -187,7 +198,7 @@ const DEF = {
   ],
   gbm:[
     // Globales
-    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:4050.00, pm:4250.00, st:'comprar',  yt:'AMZN'},
+    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:4050.00, pm:4236.00, st:'comprar',  yt:'AMZN'},
     {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6318.27, pm:6318.27, st:'mantener', yt:'MSFT'},
     {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1501.50, pm:1401.00, st:'mantener', yt:'NFLX'},
     {t:'NU',      n:'Nu Holdings',     g:'Global', tits:25,  pp:218.00,  pm:213.00,  st:'acumular', yt:'NU'},
@@ -281,6 +292,38 @@ const DEF = {
     {t:'NVDA',  n:'NVIDIA',            precio:211, zMin:175, zMax:190, obj:275, pot:40, mon:'USD'},
     {t:'SPCX',  n:'SpaceX',            precio:135, zMin:110, zMax:120, obj:200, pot:48, mon:'USD'},
   ],
+  frases:[
+    "El éxito financiero no se trata de adivinar el futuro, sino de la disciplina constante con la que construyes tu presente.",
+    "El interés compuesto es la octava maravilla del mundo. Quien lo entiende, lo gana. Quien no, lo paga. — Einstein",
+    "No necesitas ser brillante, solo necesitas ser más racional que el promedio, la mayoría de las veces. — Buffett",
+    "El riesgo viene de no saber lo que estás haciendo. — Warren Buffett",
+    "Cada peso que inviertes hoy es un soldado que trabaja para ti mientras duermes.",
+    "La paciencia es amarga, pero su fruto es dulce. — Aristóteles",
+    "Los mercados pueden mantenerse irracionales más tiempo del que tú puedes mantenerte solvente — por eso diversificas.",
+    "No es cuánto dinero ganas, sino cuánto dinero conservas, cómo trabaja para ti, y cuántas generaciones lo conservan. — Robert Kiyosaki",
+    "El mejor momento para plantar un árbol fue hace 20 años. El segundo mejor momento es ahora.",
+    "Invertir con éxito requiere tiempo, disciplina y paciencia. No importa cuán grande sea el talento o el esfuerzo. — Buffett",
+    "La constancia vence al talento cuando el talento no es constante.",
+    "Tu yo del futuro te va a agradecer cada aportación que hagas hoy, aunque hoy se sienta pequeña.",
+    "El mercado es un mecanismo para transferir dinero del impaciente al paciente. — Buffett",
+    "No pongas todos los huevos en una canasta — pero tampoco abras tantas canastas que no puedas cuidar ninguna.",
+    "Una inversión en conocimiento paga el mejor interés. — Benjamin Franklin",
+    "El precio es lo que pagas. El valor es lo que recibes. — Warren Buffett",
+    "Construir patrimonio es un maratón, no una carrera de velocidad. Sigue corriendo.",
+    "La regla número 1: nunca pierdas dinero. La regla número 2: nunca olvides la regla número 1. — Buffett",
+    "Diversificar es protegerte de tu propia ignorancia sobre lo que va a pasar.",
+    "Cada semana que aportas, te acercas un paso más a tu libertad financiera. No lo subestimes.",
+    "El dinero que no se mueve, se devalúa. El dinero que trabaja, se multiplica.",
+    "Los grandes patrimonios se construyen en silencio, aportación tras aportación, año tras año.",
+    "Si no sabes quién eres, el mercado de valores es un lugar caro para descubrirlo. — Adam Smith",
+    "La volatilidad no es riesgo. El riesgo real es no entender en qué estás invirtiendo.",
+    "Hoy es un buen día para seguir construyendo tu futuro financiero.",
+    "El hábito de ahorrar e invertir, por pequeño que sea, transforma vidas en una década.",
+    "No te compares con otros inversionistas. Compárate con tu yo de hace un año.",
+    "La libertad financiera no es un destino, es la consecuencia de hábitos sostenidos en el tiempo.",
+    "Sigue aportando aunque el mercado esté rojo. Especialmente cuando está rojo.",
+    "Tu portafolio refleja tus decisiones, no tu suerte. Decide bien, consistentemente.",
+  ],
   agenda:[
     {u:'alta',  f:'Esta semana', ic:'🎯', t:'Comprar NU Holdings',       d:'Usar $6,318 disponibles. ~25-28 acciones a $220 MXN'},
     {u:'media', f:'22 Jul 2026', ic:'📊', t:'Reporte Q2 WALMEX',         d:'Decidir si aumentar posición según resultados'},
@@ -302,7 +345,7 @@ function cargar(){
 }
 function guardar(){ try{ localStorage.setItem('ruta_saul_v4',JSON.stringify(D)); }catch(e){} }
 let D = cargar();
-const APP_VERSION = '2026.06.19-divs';
+const APP_VERSION = '2026.06.19-v2';
 console.log('Ruta Saul · versión '+APP_VERSION);
 
 // ── Helpers ──
@@ -328,9 +371,27 @@ const gLabels = {Global:'🌎 Global', México:'🇲🇽 México', FIBRA:'🏢 F
 
 // ── Total GBM ──
 function totalGBM(){ return D.gbm.reduce((s,a)=>s+(a.tits*a.pm),0); }
+
+function fraseDeLaSemana(){
+  const now = new Date();
+  const start = new Date(now.getFullYear(),0,1);
+  const diff = now - start;
+  const semana = Math.floor(diff/(7*24*60*60*1000));
+  return D.frases[semana % D.frases.length];
+}
+
+function poderDeCompra(){
+  const base = D.poderCompra.efectivo;
+  return D.poderCompra.incluirAporte ? base + D.poderCompra.aporteSemanal : base;
+}
 function totalPilares(){
   const gbmVal = totalGBM();
-  return D.pilares.reduce((s,p)=> p.id==='gbm' ? s+gbmVal : s+p.saldo, 0);
+  const criptoVal = D.cripto.reduce((s,c)=>s+c.pm,0);
+  return D.pilares.reduce((s,p)=>{
+    if(p.id==='gbm') return s+gbmVal;
+    if(p.id==='bitso') return s+criptoVal;
+    return s+p.saldo;
+  },0);
 }
 
 // ══════════════════════════════════════════
@@ -408,14 +469,16 @@ function tplGeneral(){
   const rojo  = D.gbm.filter(a=>a.pm<a.pp).length;
 
   // Pilares
+  const criptoTotal = D.cripto.reduce((s,c)=>s+c.pm,0);
   const pilaresH = D.pilares.map(p=>{
-    const val = p.id==='gbm' ? gbmVal : p.saldo;
+    const val = p.id==='gbm' ? gbmVal : p.id==='bitso' ? criptoTotal : p.saldo;
     const pp = (val/total*100).toFixed(1);
+    const tasaH = p.tasa ? `<span style="color:var(--green);font-weight:700"> · ${p.tasa}% anual</span>` : '';
     return `<div class="card card-tap" onclick="editPilar('${p.id}')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:9px">
           <div style="width:36px;height:36px;border-radius:9px;background:${p.c}18;display:flex;align-items:center;justify-content:center;font-size:17px">${p.ic}</div>
-          <div><div style="font-weight:600;font-size:13px">${p.n}</div><div style="font-size:10px;color:var(--muted)">${fmt(p.aporte)}/mes</div></div>
+          <div><div style="font-weight:600;font-size:13px">${p.n}</div><div style="font-size:10px;color:var(--muted)">${fmt(p.aporte)}/mes${tasaH}</div></div>
         </div>
         <div style="text-align:right">
           <div style="font-family:var(--mono);font-size:13px;font-weight:700">${fmt(val)}</div>
@@ -477,6 +540,17 @@ function tplGeneral(){
       <div class="hs"><div class="v" style="color:var(--yellow)">5</div><div class="l">Pilares</div></div>
     </div>
   </div>
+
+  <div class="card" style="background:linear-gradient(135deg,#1a1530,#0d1420);border-color:#a78bfa30;padding:14px">
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:18px">💭</span>
+      <div>
+        <div style="font-size:8px;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Frase de la semana</div>
+        <div style="font-size:12px;color:var(--muted2);line-height:1.6;font-style:italic">"${fraseDeLaSemana()}"</div>
+      </div>
+    </div>
+  </div>
+
   <div class="sec">Distribución de Pilares <span style="font-size:8px;color:var(--muted)">(toca para editar)</span></div>
   ${pilaresH}
   <div class="sec">🏦 SOFIPOs — Desglose <span style="font-size:8px;color:var(--muted)">(toca para editar)</span></div>
@@ -487,6 +561,33 @@ function tplGeneral(){
     </div>
     ${sofiH}
     <button class="btn-add" onclick="addSofipo()">+ Agregar cuenta SOFIPO</button>
+  </div>
+
+  ${tplCripto()}`;
+}
+
+function tplCripto(){
+  const totalCripto = D.cripto.reduce((s,c)=>s+c.pm,0);
+  const rows = D.cripto.map((c,i)=>{
+    return `<div class="sofi-card" style="cursor:pointer" onclick="editCripto(${i})">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:30px;height:30px;border-radius:50%;background:${c.color}20;display:flex;align-items:center;justify-content:center;font-size:14px;color:${c.color};font-weight:700">${c.ic}</div>
+          <div><div style="font-weight:700;font-size:13px">${c.t}</div><div style="font-size:10px;color:var(--muted)">${c.cant} ${c.t}</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:14px;font-weight:700">${fmt(c.pm)}</div>
+      </div>
+    </div>`;
+  }).join('');
+  return `
+  <div class="sec">₿ Cripto (Bitso) — Desglose <span style="font-size:8px;color:var(--muted)">(toca para editar)</span></div>
+  <div class="card" style="padding:13px">
+    <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--muted)">Total Cripto</div>
+      <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--orange)">${fmt(totalCripto)}</div>
+    </div>
+    ${rows}
+    <button class="btn-add" onclick="addCripto()">+ Agregar criptomoneda</button>
   </div>`;
 }
 
@@ -530,11 +631,26 @@ function tplGBM(){
     </div>`;
   }).join('');
 
+  const pc = D.poderCompra;
+  const totalPC = poderDeCompra();
+
   return `
   <div class="live-row">
     <div class="live-bdg"><i id="live-ic" class="fa-solid fa-circle-dot"></i> Precios en vivo</div>
     <button id="upd-btn" class="upd-btn">⟳ Actualizar</button>
   </div>
+
+  <div class="card card-tap" onclick="editPoderCompra()" style="background:linear-gradient(135deg,#0a2436,#0d1420);border-color:var(--green)40">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">💵 Poder de compra disponible</div>
+      <span style="font-size:9px;color:var(--muted)">✏️ editar</span>
+    </div>
+    <div style="font-family:var(--mono);font-size:24px;font-weight:700;color:var(--green)">${fmt(totalPC)}</div>
+    <div style="font-size:10px;color:var(--muted2);margin-top:4px">
+      Efectivo: ${fmt(pc.efectivo)} ${pc.incluirAporte?`+ Aportación: ${fmt(pc.aporteSemanal)}`:'(aportación no incluida)'}
+    </div>
+  </div>
+
   <div class="card">
     <div class="g3">
       <div class="mt"><div class="ml">Invertido</div><div class="mv">${fmtK(tComp)}</div></div>
@@ -544,6 +660,27 @@ function tplGBM(){
   </div>
   ${gruposH}
   <button class="btn-add" onclick="addGBM()">+ Agregar acción o FIBRA</button>`;
+}
+
+function editPoderCompra(){
+  const pc = D.poderCompra;
+  abrirModal(`<div class="modal-title">💵 Poder de Compra <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Efectivo disponible hoy (MXN)</label>
+  <input class="inp-full" type="number" id="pc-ef" value="${pc.efectivo}" step="0.01">
+  <label class="lbl">Aportación semanal configurada (MXN)</label>
+  <input class="inp-full" type="number" id="pc-ap" value="${pc.aporteSemanal}" step="0.01">
+  <label class="lbl" style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+    <input type="checkbox" id="pc-inc" ${pc.incluirAporte?'checked':''} style="width:16px;height:16px">
+    Sumar aportación semanal al cálculo
+  </label>
+  <button class="btn-save" onclick="savePoderCompra()">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function savePoderCompra(){
+  D.poderCompra.efectivo=+document.getElementById('pc-ef').value||0;
+  D.poderCompra.aporteSemanal=+document.getElementById('pc-ap').value||0;
+  D.poderCompra.incluirAporte=document.getElementById('pc-inc').checked;
+  guardar(); cerrarModal(); renderTab();
 }
 
 // ══════════════════════════════════════════
@@ -792,6 +929,42 @@ function saveSofipo(id){
 function addSofipo(){
   D.sofipos.push({id:'sofi_'+Date.now(),n:'Nueva SOFIPO',saldo:0,tasa:10,meta:10000,c:'#64748b',ic:'🏦',nota:''});
   guardar(); renderTab();
+}
+
+// Cripto
+function editCripto(i){
+  const c=D.cripto[i];
+  abrirModal(`<div class="modal-title">${c.ic} ${c.n} <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Cantidad de ${c.t}</label><input class="inp-full" type="number" id="ec-cant" value="${c.cant}" step="0.00000001">
+  <label class="lbl">Valor total en MXN</label><input class="inp-full" type="number" id="ec-pm" value="${c.pm}" step="0.01">
+  <button class="btn-save" onclick="saveCripto(${i})">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveCripto(i){
+  D.cripto[i].cant=+document.getElementById('ec-cant').value||D.cripto[i].cant;
+  D.cripto[i].pm=+document.getElementById('ec-pm').value||D.cripto[i].pm;
+  guardar(); cerrarModal(); renderTab();
+}
+function addCripto(){
+  abrirModal(`<div class="modal-title">+ Nueva cripto <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">Ticker (ej: XRP, ETH)</label><input class="inp-full" type="text" id="nc-t" placeholder="XRP">
+  <label class="lbl">Nombre</label><input class="inp-full" type="text" id="nc-n" placeholder="XRP">
+  <label class="lbl">Cantidad</label><input class="inp-full" type="number" id="nc-cant" step="0.00000001" placeholder="0">
+  <label class="lbl">Valor total en MXN</label><input class="inp-full" type="number" id="nc-pm" step="0.01" placeholder="0.00">
+  <button class="btn-save" onclick="saveAddCripto()">Agregar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveAddCripto(){
+  const colores=['#23292f','#627eea','#f0b90b','#0033ad','#8247e5'];
+  D.cripto.push({
+    t:document.getElementById('nc-t').value.toUpperCase(),
+    n:document.getElementById('nc-n').value,
+    cant:+document.getElementById('nc-cant').value||0,
+    pm:+document.getElementById('nc-pm').value||0,
+    color:colores[D.cripto.length%colores.length],
+    ic:document.getElementById('nc-t').value.charAt(0).toUpperCase()
+  });
+  guardar(); cerrarModal(); renderTab();
 }
 
 // GBM
