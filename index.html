@@ -187,10 +187,13 @@ const DEF = {
     aporteSemanal: 450,
     incluirAporte: true
   },
-  // Posiciones cripto individuales (Bitso)
+  // Tipo de cambio USD/MXN — se actualiza junto con los precios
+  tipoCambio: 17.33,
+  ultimaActualizacionGlobal: null,
+  // Posiciones cripto individuales (Bitso) — con histórico para tendencia
   cripto:[
-    {t:'BTC', n:'Bitcoin', cant:0.00237124, pm:2704.00, color:'#f97316', ic:'₿'},
-    {t:'XRP', n:'XRP',     cant:0,          pm:0,       color:'#23292f', ic:'✕'},
+    {t:'BTC', n:'Bitcoin', cant:0.00237124, pm:2704.00, color:'#f97316', ic:'₿', yt:'BTC-MXN', cambio24h:0, historial:[2950,2890,2820,2780,2750,2730,2704]},
+    {t:'XRP', n:'XRP',     cant:0,          pm:0,       color:'#23292f', ic:'✕', yt:'XRP-MXN', cambio24h:0, historial:[0,0,0,0,0,0,0]},
   ],
   sofipos:[
     {id:'nu',   n:'Nu Cajita Turbo', saldo:25290.51, tasa:13.00, meta:25000, c:'#a855f7', ic:'🟣', nota:'Topada en $25K ✅'},
@@ -198,21 +201,23 @@ const DEF = {
   ],
   gbm:[
     // Globales
-    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:4050.00, pm:4236.00, st:'comprar',  yt:'AMZN'},
-    {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6318.27, pm:6318.27, st:'mantener', yt:'MSFT'},
-    {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1501.50, pm:1401.00, st:'mantener', yt:'NFLX'},
-    {t:'NU',      n:'Nu Holdings',     g:'Global', tits:25,  pp:218.00,  pm:213.00,  st:'acumular', yt:'NU'},
+    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:3783.81, pm:4236.00, st:'comprar',  yt:'AMZN'},
+    {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6650.00, pm:6666.55, st:'mantener', yt:'MSFT'},
+    {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1561.75, pm:1350.97, st:'mantener', yt:'NFLX'},
+    {t:'NU',      n:'Nu Holdings',     g:'Global', tits:5,   pp:226.90,  pm:223.00,  st:'acumular', yt:'NU'},
     // México
-    {t:'WALMEX',  n:'Walmart México',  g:'México', tits:192, pp:54.00,   pm:52.02,   st:'vigilar',  yt:'WALMEXV.MX'},
-    {t:'FEMSA',   n:'FEMSA',           g:'México', tits:28,  pp:172.50,  pm:217.01,  st:'mantener', yt:'FEMSAUBD.MX'},
-    {t:'KOF',     n:'Coca-Cola FEMSA', g:'México', tits:10,  pp:151.50,  pm:184.73,  st:'mantener', yt:'KOFUBL.MX'},
-    {t:'BBAJIO',  n:'Banco del Bajío', g:'México', tits:46,  pp:43.50,   pm:55.00,   st:'mantener', yt:'BBAJIO-O.MX'},
-    {t:'HERDEZ',  n:'Grupo Herdez',    g:'México', tits:28,  pp:39.00,   pm:51.43,   st:'vigilar',  yt:'HERDEZ.MX'},
-    {t:'ALSEA',   n:'Alsea',           g:'México', tits:60,  pp:48.05,   pm:48.05,   st:'vigilar',  yt:'ALSEA.MX'},
+    {t:'WALMEX',  n:'Walmart México',  g:'México', tits:157, pp:54.54,   pm:52.02,   st:'vigilar',  yt:'WALMEXV.MX'},
+    {t:'FEMSA',   n:'FEMSA',           g:'México', tits:28,  pp:172.73,  pm:217.01,  st:'mantener', yt:'FEMSAUBD.MX'},
+    {t:'KOF',     n:'Coca-Cola FEMSA', g:'México', tits:10,  pp:151.68,  pm:184.73,  st:'mantener', yt:'KOFUBL.MX'},
+    {t:'BBAJIO',  n:'Banco del Bajío', g:'México', tits:46,  pp:43.58,   pm:55.00,   st:'mantener', yt:'BBAJIO-O.MX'},
+    {t:'HERDEZ',  n:'Grupo Herdez',    g:'México', tits:28,  pp:70.03,   pm:51.43,   st:'vigilar',  yt:'HERDEZ.MX'},
+    {t:'ALSEA',   n:'Alsea',           g:'México', tits:60,  pp:48.12,   pm:48.05,   st:'vigilar',  yt:'ALSEA.MX'},
+    {t:'GENIUS21',n:'Quanta Shares (Intercam)', g:'México', tits:1, pp:89.02, pm:99.60, st:'mantener', yt:''},
+    {t:'GFNORTE', n:'Grupo Financiero Banorte', g:'México', tits:6, pp:170.45, pm:188.65, st:'vigilar', yt:'GFNORTEO.MX'},
     // FIBRAs
     {t:'FNOVA17', n:'Fibra Nova',      g:'FIBRA',  tits:10,  pp:21.00,   pm:45.30,   st:'estrella', yt:'FNOVA17.MX'},
-    {t:'FUNO11',  n:'Fibra Uno',       g:'FIBRA',  tits:22,  pp:22.00,   pm:29.52,   st:'mantener', yt:'FUNO11.MX'},
-    {t:'DANHOS',  n:'Fibra Danhos',    g:'FIBRA',  tits:105, pp:24.00,   pm:28.08,   st:'mantener', yt:'DANHOS13.MX'},
+    {t:'FUNO11',  n:'Fibra Uno',       g:'FIBRA',  tits:22,  pp:20.88,   pm:29.52,   st:'mantener', yt:'FUNO11.MX'},
+    {t:'DANHOS',  n:'Fibra Danhos',    g:'FIBRA',  tits:105, pp:24.18,   pm:28.08,   st:'mantener', yt:'DANHOS13.MX'},
     {t:'FMTY14',  n:'Fibra MTY',       g:'FIBRA',  tits:36,  pp:14.28,   pm:14.25,   st:'mantener', yt:'FMTY14.MX'},
     {t:'FMX23',   n:'Fibra Infra',     g:'FIBRA',  tits:70,  pp:28.00,   pm:30.10,   st:'mantener', yt:'FMX23.MX'},
   ],
@@ -345,7 +350,7 @@ function cargar(){
 }
 function guardar(){ try{ localStorage.setItem('ruta_saul_v4',JSON.stringify(D)); }catch(e){} }
 let D = cargar();
-const APP_VERSION = '2026.06.19-v2';
+const APP_VERSION = '2026.06.21-v3';
 console.log('Ruta Saul · versión '+APP_VERSION);
 
 // ── Helpers ──
@@ -433,27 +438,46 @@ async function actualizarPrecios(){
   if(ic) ic.className='spin';
   if(btn) btn.textContent='Actualizando...';
 
-  const syms = D.gbm.map(a=>a.yt).filter(Boolean).join(',');
+  const syms = D.gbm.map(a=>a.yt).filter(Boolean).join(',')+',MXN=X';
   const yUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice`;
-  const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl)}`;
 
-  try{
-    const r = await fetch(proxy,{signal:AbortSignal.timeout(10000)});
-    const j = await r.json();
-    const quotes = j?.quoteResponse?.result || [];
-    let updated=0;
-    quotes.forEach(q=>{
-      const a = D.gbm.find(x=>x.yt===q.symbol);
-      if(a && q.regularMarketPrice){
-        a.pm = parseFloat(q.regularMarketPrice.toFixed(2));
-        updated++;
-      }
-    });
+  // Lista de proxies de respaldo — si uno falla, intenta el siguiente
+  const proxies = [
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl)}`,
+    `https://corsproxy.io/?${encodeURIComponent(yUrl)}`,
+  ];
+
+  let exito=false, updated=0;
+  for(const proxy of proxies){
+    try{
+      const r = await fetch(proxy,{signal:AbortSignal.timeout(8000)});
+      const j = await r.json();
+      const quotes = j?.quoteResponse?.result || [];
+      if(quotes.length===0) continue;
+      quotes.forEach(q=>{
+        if(q.symbol==='MXN=X' && q.regularMarketPrice){
+          D.tipoCambio = parseFloat(q.regularMarketPrice.toFixed(4));
+          return;
+        }
+        const a = D.gbm.find(x=>x.yt===q.symbol);
+        if(a && q.regularMarketPrice){
+          a.pm = parseFloat(q.regularMarketPrice.toFixed(2));
+          a.ultAct = new Date().toISOString();
+          updated++;
+        }
+      });
+      exito=true;
+      break;
+    }catch(e){ continue; }
+  }
+
+  if(exito){
+    D.ultimaActualizacionGlobal = new Date().toISOString();
     guardar();
     renderTab();
-    toast(updated>0?`✓ ${updated} precios actualizados`:'Sin precios nuevos — intenta de nuevo');
-  }catch(e){
-    toast('Sin conexión — ingresa precios manualmente');
+    toast(updated>0?`✓ ${updated} precios + tipo de cambio actualizados`:'Sin precios nuevos — verifica tickers');
+  }else{
+    toast('⚠️ Sin conexión a Yahoo Finance — verifica precios manualmente en GBM');
   }
   actualizando=false;
 }
@@ -566,16 +590,42 @@ function tplGeneral(){
   ${tplCripto()}`;
 }
 
+function sparkline(data, color, w=70, h=24){
+  if(!data || data.length<2) return '';
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = max-min || 1;
+  const pts = data.map((v,i)=>{
+    const x = (i/(data.length-1))*w;
+    const y = h - ((v-min)/range)*h;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  return `<svg width="${w}" height="${h}" style="display:block"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
 function tplCripto(){
   const totalCripto = D.cripto.reduce((s,c)=>s+c.pm,0);
   const rows = D.cripto.map((c,i)=>{
+    const cambio = c.cambio24h||0;
+    const subiendo = cambio>=0;
+    const flecha = subiendo?'▲':'▼';
+    const colorCambio = subiendo?'var(--green)':'var(--red)';
+    const spark = sparkline(c.historial, c.color);
     return `<div class="sofi-card" style="cursor:pointer" onclick="editCripto(${i})">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:30px;height:30px;border-radius:50%;background:${c.color}20;display:flex;align-items:center;justify-content:center;font-size:14px;color:${c.color};font-weight:700">${c.ic}</div>
-          <div><div style="font-weight:700;font-size:13px">${c.t}</div><div style="font-size:10px;color:var(--muted)">${c.cant} ${c.t}</div></div>
+          <div>
+            <div style="font-weight:700;font-size:13px">${c.t}</div>
+            <div style="font-size:10px;color:var(--muted)">${c.cant} ${c.t}</div>
+          </div>
         </div>
-        <div style="font-family:var(--mono);font-size:14px;font-weight:700">${fmt(c.pm)}</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${spark}
+          <div style="text-align:right">
+            <div style="font-family:var(--mono);font-size:14px;font-weight:700">${fmt(c.pm)}</div>
+            <div style="font-size:10px;color:${colorCambio};font-weight:600">${flecha} ${Math.abs(cambio).toFixed(2)}%</div>
+          </div>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -634,10 +684,28 @@ function tplGBM(){
   const pc = D.poderCompra;
   const totalPC = poderDeCompra();
 
+  const ultAct = D.ultimaActualizacionGlobal;
+  let ultActTxt = 'Nunca actualizado — verifica precios manualmente';
+  let ultActColor = 'var(--yellow)';
+  if(ultAct){
+    const mins = Math.floor((Date.now()-new Date(ultAct))/60000);
+    if(mins<1) { ultActTxt='Actualizado hace instantes'; ultActColor='var(--green)'; }
+    else if(mins<60) { ultActTxt=`Actualizado hace ${mins} min`; ultActColor='var(--green)'; }
+    else if(mins<1440) { ultActTxt=`Actualizado hace ${Math.floor(mins/60)}h`; ultActColor='var(--yellow)'; }
+    else { ultActTxt=`Actualizado hace ${Math.floor(mins/1440)}d — pide actualizar`; ultActColor='var(--red)'; }
+  }
+
   return `
   <div class="live-row">
     <div class="live-bdg"><i id="live-ic" class="fa-solid fa-circle-dot"></i> Precios en vivo</div>
     <button id="upd-btn" class="upd-btn">⟳ Actualizar</button>
+  </div>
+  <div style="font-size:10px;color:${ultActColor};margin:-6px 0 12px;display:flex;align-items:center;gap:5px">
+    <span style="width:5px;height:5px;border-radius:50%;background:${ultActColor};display:inline-block"></span>
+    ${ultActTxt}
+  </div>
+  <div style="background:var(--yellow-d);border:1px solid #f0b42930;border-radius:10px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:var(--muted2);line-height:1.5">
+    ⚠️ Antes de ejecutar una compra o venta real, verifica el precio exacto directamente en GBM. Esta app usa una API gratuita que puede tener unos minutos de retraso o fallar temporalmente.
   </div>
 
   <div class="card card-tap" onclick="editPoderCompra()" style="background:linear-gradient(135deg,#0a2436,#0d1420);border-color:var(--green)40">
@@ -824,10 +892,15 @@ function toggleAno(ano){
 // TAB RADAR
 // ══════════════════════════════════════════
 function tplRadar(){
+  const tc = D.tipoCambio;
   const radarH = D.radar.map((r,i)=>{
     const enZona = r.precio<=r.zMax;
     const dist = ((r.precio-r.zMax)/r.precio*100).toFixed(1);
     const fill = Math.min(100,Math.max(5,((r.precio-r.zMin*0.85)/(r.obj-r.zMin*0.85))*100));
+    const precioMXN = (r.precio*tc).toLocaleString('es-MX',{maximumFractionDigits:0});
+    const zMinMXN = (r.zMin*tc).toLocaleString('es-MX',{maximumFractionDigits:0});
+    const zMaxMXN = (r.zMax*tc).toLocaleString('es-MX',{maximumFractionDigits:0});
+    const objMXN = (r.obj*tc).toLocaleString('es-MX',{maximumFractionDigits:0});
     return `<div class="radar-card ${enZona?'zona':''}" onclick="editRadar(${i})">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px">
         <div>
@@ -835,12 +908,16 @@ function tplRadar(){
           <div style="font-size:10px;color:var(--muted)">${r.n}</div>
         </div>
         <div style="text-align:right">
-          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--yellow)">$${r.precio} ${r.mon}</div>
-          <div style="font-size:9px;color:${enZona?'var(--green)':'var(--purple)'};margin-top:2px">${enZona?'✅ EN ZONA — evalúa entrar':dist+'% sobre zona'}</div>
+          <div style="font-family:var(--mono);font-size:14px;font-weight:700;color:var(--yellow)">$${r.precio} USD</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--blue);margin-top:1px">≈ $${precioMXN} MXN</div>
+          <div style="font-size:9px;color:${enZona?'var(--green)':'var(--purple)'};margin-top:3px">${enZona?'✅ EN ZONA — evalúa entrar':dist+'% sobre zona'}</div>
         </div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:5px">
-        <span>Zona: $${r.zMin}–$${r.zMax}</span><span>Objetivo: $${r.obj} (+${r.pot}%)</span>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:3px">
+        <span>Zona: $${r.zMin}–$${r.zMax} USD</span><span>Objetivo: $${r.obj} USD (+${r.pot}%)</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--blue);margin-bottom:5px">
+        <span>≈ $${zMinMXN}–$${zMaxMXN} MXN</span><span>≈ $${objMXN} MXN</span>
       </div>
       <div class="bar-bg" style="height:3px"><div class="bar-fill" style="width:${fill}%;background:${enZona?'var(--green)':'var(--purple)'}"></div></div>
     </div>`;
@@ -851,8 +928,29 @@ function tplRadar(){
     <div style="font-size:12px;color:var(--purple);font-weight:700;margin-bottom:3px">🎯 Estrategia de entrada</div>
     <div style="font-size:11px;color:var(--muted2);line-height:1.6">No entrar en máximos. Cada acción tiene zona verde de compra ideal. Fuera de esa zona, esperamos. Toca para editar precios.</div>
   </div>
+
+  <div class="card card-tap" onclick="editTipoCambio()" style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px">
+    <div>
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">💱 Tipo de cambio USD/MXN</div>
+      <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:var(--blue)">$${tc.toFixed(4)}</div>
+    </div>
+    <span style="font-size:9px;color:var(--muted)">✏️ editar</span>
+  </div>
+
   ${radarH}
   <button class="btn-add" onclick="addRadar()">+ Agregar al radar</button>`;
+}
+
+function editTipoCambio(){
+  abrirModal(`<div class="modal-title">💱 Tipo de Cambio <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <label class="lbl">USD a MXN (cuántos pesos por 1 dólar)</label>
+  <input class="inp-full" type="number" id="tc-val" value="${D.tipoCambio}" step="0.0001">
+  <button class="btn-save" onclick="saveTipoCambio()">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveTipoCambio(){
+  D.tipoCambio=+document.getElementById('tc-val').value||D.tipoCambio;
+  guardar(); cerrarModal(); renderTab();
 }
 
 // ══════════════════════════════════════════
@@ -937,12 +1035,21 @@ function editCripto(i){
   abrirModal(`<div class="modal-title">${c.ic} ${c.n} <button class="modal-close" onclick="cerrarModal()">✕</button></div>
   <label class="lbl">Cantidad de ${c.t}</label><input class="inp-full" type="number" id="ec-cant" value="${c.cant}" step="0.00000001">
   <label class="lbl">Valor total en MXN</label><input class="inp-full" type="number" id="ec-pm" value="${c.pm}" step="0.01">
+  <label class="lbl">Cambio 24h (%) — usa negativo si bajó</label><input class="inp-full" type="number" id="ec-camb" value="${c.cambio24h||0}" step="0.01">
   <button class="btn-save" onclick="saveCripto(${i})">Guardar</button>
   <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
 }
 function saveCripto(i){
+  const nuevoPm = +document.getElementById('ec-pm').value||D.cripto[i].pm;
   D.cripto[i].cant=+document.getElementById('ec-cant').value||D.cripto[i].cant;
-  D.cripto[i].pm=+document.getElementById('ec-pm').value||D.cripto[i].pm;
+  D.cripto[i].cambio24h=+document.getElementById('ec-camb').value||0;
+  // Si el valor cambió, lo agregamos al historial para la gráfica
+  if(nuevoPm !== D.cripto[i].pm){
+    if(!D.cripto[i].historial) D.cripto[i].historial=[];
+    D.cripto[i].historial.push(nuevoPm);
+    if(D.cripto[i].historial.length>10) D.cripto[i].historial.shift();
+  }
+  D.cripto[i].pm=nuevoPm;
   guardar(); cerrarModal(); renderTab();
 }
 function addCripto(){
