@@ -190,6 +190,7 @@ const DEF = {
   // Tipo de cambio USD/MXN — se actualiza junto con los precios
   tipoCambio: 17.33,
   ultimaActualizacionGlobal: null,
+  apiKey: 'd523898a75b84774b39755dff3e01a94',
   // Posiciones cripto individuales (Bitso) — con histórico para tendencia
   cripto:[
     {t:'BTC', n:'Bitcoin', cant:0.00237124, pm:2704.00, color:'#f97316', ic:'₿', yt:'BTC-MXN', cambio24h:0, historial:[2950,2890,2820,2780,2750,2730,2704]},
@@ -200,26 +201,26 @@ const DEF = {
     {id:'didi', n:'DiDi Cuenta',    saldo:2884.54,  tasa:15.00, meta:10000, c:'#00e5a0', ic:'🟢', nota:'Meta: $10K · Sep 2026'},
   ],
   gbm:[
-    // Globales
-    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:3783.81, pm:4236.00, st:'comprar',  yt:'AMZN'},
-    {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6650.00, pm:6666.55, st:'mantener', yt:'MSFT'},
-    {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1561.75, pm:1350.97, st:'mantener', yt:'NFLX'},
-    {t:'NU',      n:'Nu Holdings',     g:'Global', tits:5,   pp:226.90,  pm:223.00,  st:'acumular', yt:'NU'},
-    // México
-    {t:'WALMEX',  n:'Walmart México',  g:'México', tits:157, pp:54.54,   pm:52.02,   st:'vigilar',  yt:'WALMEXV.MX'},
-    {t:'FEMSA',   n:'FEMSA',           g:'México', tits:28,  pp:172.73,  pm:217.01,  st:'mantener', yt:'FEMSAUBD.MX'},
-    {t:'KOF',     n:'Coca-Cola FEMSA', g:'México', tits:10,  pp:151.68,  pm:184.73,  st:'mantener', yt:'KOFUBL.MX'},
-    {t:'BBAJIO',  n:'Banco del Bajío', g:'México', tits:46,  pp:43.58,   pm:55.00,   st:'mantener', yt:'BBAJIO-O.MX'},
-    {t:'HERDEZ',  n:'Grupo Herdez',    g:'México', tits:28,  pp:70.03,   pm:51.43,   st:'vigilar',  yt:'HERDEZ.MX'},
-    {t:'ALSEA',   n:'Alsea',           g:'México', tits:60,  pp:48.12,   pm:48.05,   st:'vigilar',  yt:'ALSEA.MX'},
-    {t:'GENIUS21',n:'Quanta Shares (Intercam)', g:'México', tits:1, pp:89.02, pm:99.60, st:'mantener', yt:''},
-    {t:'GFNORTE', n:'Grupo Financiero Banorte', g:'México', tits:6, pp:170.45, pm:188.65, st:'vigilar', yt:'GFNORTEO.MX'},
-    // FIBRAs
-    {t:'FNOVA17', n:'Fibra Nova',      g:'FIBRA',  tits:10,  pp:21.00,   pm:45.30,   st:'estrella', yt:'FNOVA17.MX'},
-    {t:'FUNO11',  n:'Fibra Uno',       g:'FIBRA',  tits:22,  pp:20.88,   pm:29.52,   st:'mantener', yt:'FUNO11.MX'},
-    {t:'DANHOS',  n:'Fibra Danhos',    g:'FIBRA',  tits:105, pp:24.18,   pm:28.08,   st:'mantener', yt:'DANHOS13.MX'},
-    {t:'FMTY14',  n:'Fibra MTY',       g:'FIBRA',  tits:36,  pp:14.28,   pm:14.25,   st:'mantener', yt:'FMTY14.MX'},
-    {t:'FMX23',   n:'Fibra Infra',     g:'FIBRA',  tits:70,  pp:28.00,   pm:30.10,   st:'mantener', yt:'FMX23.MX'},
+    // Globales — Twelve Data: solo ticker sin exchange para US
+    {t:'AMZN',    n:'Amazon',          g:'Global', tits:3,   pp:3783.81, pm:4236.00, st:'comprar',  td:'AMZN'},
+    {t:'MSFT',    n:'Microsoft',       g:'Global', tits:1,   pp:6650.00, pm:6666.55, st:'mantener', td:'MSFT'},
+    {t:'NFLX',    n:'Netflix',         g:'Global', tits:5,   pp:1561.75, pm:1350.97, st:'mantener', td:'NFLX'},
+    {t:'NU',      n:'Nu Holdings',     g:'Global', tits:5,   pp:226.90,  pm:223.00,  st:'acumular', td:'NU'},
+    // México — Twelve Data: SYMBOL:BMV para bolsa mexicana
+    {t:'WALMEX',  n:'Walmart México',  g:'México', tits:157, pp:54.54,   pm:52.02,   st:'vigilar',  td:'WALMEX:BMV'},
+    {t:'FEMSA',   n:'FEMSA',           g:'México', tits:28,  pp:172.73,  pm:217.01,  st:'mantener', td:'FEMSAUBD:BMV'},
+    {t:'KOF',     n:'Coca-Cola FEMSA', g:'México', tits:10,  pp:151.68,  pm:184.73,  st:'mantener', td:'KOFUBL:BMV'},
+    {t:'BBAJIO',  n:'Banco del Bajío', g:'México', tits:46,  pp:43.58,   pm:55.00,   st:'mantener', td:'BBAJIO-O:BMV'},
+    {t:'HERDEZ',  n:'Grupo Herdez',    g:'México', tits:28,  pp:70.03,   pm:51.43,   st:'vigilar',  td:'HERDEZ:BMV'},
+    {t:'ALSEA',   n:'Alsea',           g:'México', tits:60,  pp:48.12,   pm:48.05,   st:'vigilar',  td:'ALSEA:BMV'},
+    {t:'GENIUS21',n:'Quanta Shares (Intercam)', g:'México', tits:1, pp:89.02, pm:99.60, st:'mantener', td:''},
+    {t:'GFNORTE', n:'Grupo Financiero Banorte', g:'México', tits:6, pp:170.45, pm:188.65, st:'vigilar', td:'GFNORTEO:BMV'},
+    // FIBRAs — Twelve Data: SYMBOL:BMV
+    {t:'FNOVA17', n:'Fibra Nova',      g:'FIBRA',  tits:10,  pp:21.00,   pm:45.30,   st:'estrella', td:'FNOVA17:BMV'},
+    {t:'FUNO11',  n:'Fibra Uno',       g:'FIBRA',  tits:22,  pp:20.88,   pm:29.52,   st:'mantener', td:'FUNO11:BMV'},
+    {t:'DANHOS',  n:'Fibra Danhos',    g:'FIBRA',  tits:105, pp:24.18,   pm:28.08,   st:'mantener', td:'DANHOS13:BMV'},
+    {t:'FMTY14',  n:'Fibra MTY',       g:'FIBRA',  tits:36,  pp:14.28,   pm:14.25,   st:'mantener', td:'FMTY14:BMV'},
+    {t:'FMX23',   n:'Fibra Infra',     g:'FIBRA',  tits:70,  pp:28.00,   pm:30.10,   st:'mantener', td:'FMX23:BMV'},
   ],
   avisos:[
     {activo:'FMTY14', exDiv:'2026-06-25', pago:'2026-06-30', monto:0.085, tits:36},
@@ -350,7 +351,7 @@ function cargar(){
 }
 function guardar(){ try{ localStorage.setItem('ruta_saul_v4',JSON.stringify(D)); }catch(e){} }
 let D = cargar();
-const APP_VERSION = '2026.06.21-v3';
+const APP_VERSION = '2026.06.21-v4';
 console.log('Ruta Saul · versión '+APP_VERSION);
 
 // ── Helpers ──
@@ -432,44 +433,45 @@ function renderTab(){
 // ══════════════════════════════════════════
 async function actualizarPrecios(){
   if(actualizando) return;
+  if(!D.apiKey){
+    toast('⚠️ Configura tu API key de Twelve Data primero');
+    editApiKey();
+    return;
+  }
   actualizando=true;
   const ic=document.getElementById('live-ic');
   const btn=document.getElementById('upd-btn');
   if(ic) ic.className='spin';
   if(btn) btn.textContent='Actualizando...';
 
-  const syms = D.gbm.map(a=>a.yt).filter(Boolean).join(',')+',MXN=X';
-  const yUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}&fields=regularMarketPrice`;
-
-  // Lista de proxies de respaldo — si uno falla, intenta el siguiente
-  const proxies = [
-    `https://api.allorigins.win/raw?url=${encodeURIComponent(yUrl)}`,
-    `https://corsproxy.io/?${encodeURIComponent(yUrl)}`,
-  ];
+  // Twelve Data usa formato SYMBOL:EXCHANGE para mercados no-US, y soporta hasta 120 símbolos por llamada
+  const syms = D.gbm.map(a=>a.td).filter(Boolean).join(',')+',USD/MXN';
+  const url = `https://api.twelvedata.com/quote?symbol=${encodeURIComponent(syms)}&apikey=${D.apiKey}`;
 
   let exito=false, updated=0;
-  for(const proxy of proxies){
-    try{
-      const r = await fetch(proxy,{signal:AbortSignal.timeout(8000)});
-      const j = await r.json();
-      const quotes = j?.quoteResponse?.result || [];
-      if(quotes.length===0) continue;
-      quotes.forEach(q=>{
-        if(q.symbol==='MXN=X' && q.regularMarketPrice){
-          D.tipoCambio = parseFloat(q.regularMarketPrice.toFixed(4));
-          return;
-        }
-        const a = D.gbm.find(x=>x.yt===q.symbol);
-        if(a && q.regularMarketPrice){
-          a.pm = parseFloat(q.regularMarketPrice.toFixed(2));
-          a.ultAct = new Date().toISOString();
-          updated++;
-        }
-      });
-      exito=true;
-      break;
-    }catch(e){ continue; }
-  }
+  try{
+    const r = await fetch(url,{signal:AbortSignal.timeout(10000)});
+    const j = await r.json();
+
+    // Cuando hay múltiples símbolos, la respuesta viene como objeto {SYMBOL: {...}, SYMBOL2: {...}}
+    // Cuando hay un solo símbolo, viene plano. Normalizamos ambos casos.
+    const entries = (syms.includes(',') && !j.symbol) ? Object.entries(j) : [[syms, j]];
+
+    entries.forEach(([key, q])=>{
+      if(!q || q.status==='error' || !q.close) return;
+      if(key==='USD/MXN' || q.symbol==='USD/MXN'){
+        D.tipoCambio = parseFloat(parseFloat(q.close).toFixed(4));
+        return;
+      }
+      const a = D.gbm.find(x=>x.td===key || x.td===q.symbol);
+      if(a){
+        a.pm = parseFloat(parseFloat(q.close).toFixed(2));
+        a.ultAct = new Date().toISOString();
+        updated++;
+      }
+    });
+    exito = updated>0 || entries.length>0;
+  }catch(e){ exito=false; }
 
   if(exito){
     D.ultimaActualizacionGlobal = new Date().toISOString();
@@ -477,7 +479,7 @@ async function actualizarPrecios(){
     renderTab();
     toast(updated>0?`✓ ${updated} precios + tipo de cambio actualizados`:'Sin precios nuevos — verifica tickers');
   }else{
-    toast('⚠️ Sin conexión a Yahoo Finance — verifica precios manualmente en GBM');
+    toast('⚠️ Error al conectar con Twelve Data — verifica tu API key o precios manualmente');
   }
   actualizando=false;
 }
@@ -697,8 +699,11 @@ function tplGBM(){
 
   return `
   <div class="live-row">
-    <div class="live-bdg"><i id="live-ic" class="fa-solid fa-circle-dot"></i> Precios en vivo</div>
-    <button id="upd-btn" class="upd-btn">⟳ Actualizar</button>
+    <div class="live-bdg"><i id="live-ic" class="fa-solid fa-circle-dot"></i> Twelve Data API</div>
+    <div style="display:flex;gap:6px">
+      <button onclick="editApiKey()" class="upd-btn" style="color:var(--blue)">🔑 Key</button>
+      <button id="upd-btn" class="upd-btn">⟳ Actualizar</button>
+    </div>
   </div>
   <div style="font-size:10px;color:${ultActColor};margin:-6px 0 12px;display:flex;align-items:center;gap:5px">
     <span style="width:5px;height:5px;border-radius:50%;background:${ultActColor};display:inline-block"></span>
@@ -939,6 +944,22 @@ function tplRadar(){
 
   ${radarH}
   <button class="btn-add" onclick="addRadar()">+ Agregar al radar</button>`;
+}
+
+function editApiKey(){
+  abrirModal(`<div class="modal-title">🔑 API Key — Twelve Data <button class="modal-close" onclick="cerrarModal()">✕</button></div>
+  <div style="background:var(--blue-d);border:1px solid var(--blue)30;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:11px;color:var(--muted2);line-height:1.6">
+    Tu API key de <strong style="color:var(--blue)">twelvedata.com</strong> es gratuita y te da 800 consultas/día. Nunca la compartas con nadie más.
+  </div>
+  <label class="lbl">API Key</label>
+  <input class="inp-full" type="text" id="ak-val" value="${D.apiKey||''}" placeholder="d523898a75b84774b39755dff3e01a94" autocomplete="off">
+  <button class="btn-save" onclick="saveApiKey()">Guardar</button>
+  <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>`);
+}
+function saveApiKey(){
+  D.apiKey = document.getElementById('ak-val').value.trim();
+  guardar(); cerrarModal();
+  toast('✓ API key guardada — toca Actualizar para probar');
 }
 
 function editTipoCambio(){
